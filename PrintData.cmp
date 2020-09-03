@@ -1,0 +1,108 @@
+<aura:component controller="FieldSet" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    
+    <!-- Gets Values from custom button formula-->
+    <aura:attribute name="fieldSetName" type="String"/>
+    <aura:attribute name="sObjectTypeName" type="String"/>
+    <aura:attribute name="objName" type="String"/>
+    <aura:attribute name="recordId" type="String"/>
+    
+    <aura:attribute name="mode" type="String" default="readonly"/>
+    <aura:attribute name="isApp" type="Boolean" default="true"/>
+    <aura:attribute name="columns" type="Integer" default="2"/>
+    <aura:attribute name="fieldSet" type="String[]"/>    
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <!-- Related list attributes-->
+    <aura:attribute name="isRelatedList" type="Boolean"/>
+    <aura:attribute name="childObjectName" type="String" default="Contact"/>
+    <aura:attribute name="childRelatedListName" type="String" default="Contacts"/>
+    <aura:attribute name="referenceFieldName" type="String"/>
+    <aura:attribute name="referenceFieldValue" type="String"/>
+    <aura:attribute name="iconName" type="String"/>
+    <aura:attribute name="relatedList" type="Object[]"/>
+    
+    <!-- If using In App Display this -->
+    <aura:if isTrue="{!v.isApp}">
+        <aura:if isTrue="{!!v.isRelatedList}">
+            <div class="slds-p-left_large">
+                <lightning:avatar size="large"   
+                                  src="https://live.staticflickr.com/65535/48735236061_41c4d0c71f_m.jpg" 
+                                  class="slds-m-right_small"/>
+                <div class="slds-text-heading_large">{!v.objName}</div>
+                <lightning:recordForm recordId="{!v.recordId}"
+                                      objectApiName="{!v.sObjectTypeName}"
+                                      fields="{!v.fieldSet}"
+                                      columns="2"
+                                      density="comfy"
+                                      mode="{!v.mode}"/>
+            </div>
+        </aura:if>
+        
+        <aura:if isTrue="{!v.isRelatedList}">
+            <div class="slds-p-around_large">
+                <lightning:card title="{!v.childRelatedListName}">
+                    <div class="slds-p-around_small">
+                        <aura:iteration items="{!v.relatedList}" var="relatedRecord">
+                            <aura:if isTrue="{!v.fieldSet}">
+                                <lightning:card title="{!relatedRecord.Name}">
+                                    <div class="slds-p-around_small">
+                                        <lightning:recordForm recordId="{!relatedRecord.Id}"
+                                                              objectApiName="{!v.sObjectTypeName}"
+                                                              fields="{!v.fieldSet}"
+                                                              columns="2"
+                                                              density="comfy"
+                                                              mode="{!v.mode}"/>
+                                    </div>
+                                </lightning:card><br></br>
+                            </aura:if>
+                        </aura:iteration>
+                    </div>
+                </lightning:card>
+            </div>
+        </aura:if>
+    </aura:if>
+    
+    <!-- In Record page and Not In App Display this -->
+    <aura:if isTrue="{!!v.isApp}">
+        <aura:if isTrue="{!!v.isRelatedList}">
+            <lightning:card title="">
+                <div class="slds-p-left_large">
+                    <div class="slds-text-heading_large">{!v.objName}</div>
+                    <lightning:recordForm recordId="{!v.recordId}"
+                                          objectApiName="{!v.sObjectTypeName}"
+                                          fields="{!v.fieldSet}"
+                                          columns="2"
+                                          density="comfy"
+                                          mode="{!v.mode}"/>
+                </div>
+            </lightning:card>
+        </aura:if>
+        
+        <aura:if isTrue="{!v.isRelatedList}">
+            <lightning:card title="{!v.childRelatedListName}">
+                <aura:set attribute="actions">
+                    <lightning:button label="New" onclick="{!c.createNewChild}"/>
+                </aura:set>
+                <div class="slds-p-around_small">
+                    <aura:iteration items="{!v.relatedList}" var="relatedRecord">
+                        <aura:if isTrue="{!v.fieldSet}">
+                            <lightning:card title="{!relatedRecord.Name}">
+                                <div class="slds-box">
+                                    <div class="slds-p-around_small">
+                                        <lightning:recordForm recordId="{!relatedRecord.Id}"
+                                                              objectApiName="{!v.sObjectTypeName}"
+                                                              fields="{!v.fieldSet}"
+                                                              columns="{!v.columns}"
+                                                              density="comfy"
+                                                              mode="{!v.mode}"/>
+                                    </div>
+                                </div>
+                            </lightning:card><br></br>
+                        </aura:if>
+                    </aura:iteration>
+                </div>
+            </lightning:card>
+        </aura:if>
+    </aura:if>
+</aura:component>
