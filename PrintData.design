@@ -1,0 +1,15 @@
+<design:component>
+    <!-- We are not using these attributes-->
+    <design:attribute name="recordId" label="Record Id" description="Optional"/>
+    <design:attribute name="isApp" label="Is App?" description="If you are using this in App console select this"/>
+    <design:attribute name="fieldSetName" label="Field Set Api Name" description="Enter field-set name"/>
+    <design:attribute name="sObjectTypeName" label="Object Api Name" description="Enter object API name"/>
+    <design:attribute name="objName" label="Object Name" description="Enter object API name"/>
+	<design:attribute name="mode" label="Mode" datasource="view, edit, readonly" description="Select mode"/>
+    <design:attribute name="childObjectName" description="Select child object API name" label="Child Objects" datasource="Contact, Opportunity"/>
+	<design:attribute name="referenceFieldName" label="Reference Field Api" description="Enter reference field API name ex: 'AccountId' for contact"/>
+	<design:attribute name="isRelatedList" label="Is Related List" description="Check if this is a related list"/>
+    <design:attribute name="childRelatedListName" label="Chile Related List Name" description="Enter child listname if this a related list"/>
+    <design:attribute name="iconName" label="Icon Name" description="Icon Name"/>
+    <design:attribute name="columns" label="Columns" description="Enter Columns"/>
+</design:component>
